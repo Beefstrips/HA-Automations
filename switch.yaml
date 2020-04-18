@@ -1,0 +1,291 @@
+- platform: template
+  switches:
+# --- Harmony Remotes --- #
+# -- Bedroom Remote -- #  
+# - Chromecast - #
+        chromecast_bedroom:
+          value_template: "{{ is_state_attr('remote.living_area', 'current_activity', 'Chromecast') }}"
+          turn_on:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'Chromecast'
+          turn_off:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'PowerOff'
+# - TV - #
+        tv_bedroom:
+          value_template: "{{ is_state_attr('remote.bedroom', 'current_activity', 'TV') }}"
+          turn_on:
+            service: remote.turn_on
+            data:
+              entity_id: remote.bedroom
+              activity: 'TV'
+          turn_off:
+            service: remote.turn_on
+            data:
+              entity_id: remote.bedroom
+              activity: 'PowerOff'              
+# -- Living Area -- #  
+# - Media Centre - #
+        media_centre_living_area:
+          value_template: "{{ is_state_attr('remote.living_area', 'current_activity', 'Media Centre') }}"
+          turn_on:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'Media Centre'
+          turn_off:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'PowerOff' 
+# - Play PC - #
+        play_pc_living_area:
+          value_template: "{{ is_state_attr('remote.living_area', 'current_activity', 'Play PC') }}"
+          turn_on:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'Play PC'
+          turn_off:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'PowerOff' 
+# - PS4 - #
+        ps4:
+          value_template: "{{ is_state_attr('remote.living_area', 'current_activity', 'PS4') }}"
+          turn_on:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'PS4'
+          turn_off:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'PowerOff'
+# - TV - #
+        tv_living_area:
+          value_template: "{{ is_state_attr('remote.living_area', 'current_activity', 'TV') }}"
+          turn_on:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'TV'
+          turn_off:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'PowerOff'
+# - XBox one -#
+        xbox_one:
+          value_template: "{{ is_state_attr('remote.living_area', 'current_activity', 'Xbox One') }}"
+          turn_on:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'Xbox One'
+          turn_off:
+            service: remote.turn_on
+            data:
+              entity_id: remote.living_area
+              activity: 'PowerOff'
+
+# --- Light --- # 
+# - Christmas - #
+        power_christmas_tree:
+          friendly_name: "Christmas Tree"
+          value_template: "{{ states('light.power_christmas_tree') }}"
+          turn_on:
+            service: light.turn_on
+            data: 
+              entity_id: light.power_christmas_tree
+          turn_off:
+            service: light.turn_off
+            data: 
+              entity_id: light.power_christmas_tree
+        power_christmas_light_pot:
+          friendly_name: "Christmas Light Pot"
+          value_template: "{{ states('light.power_christmas_light_pot') }}"
+          turn_on:
+            service: light.turn_on
+            data: 
+              entity_id: 
+                - light.power_christmas_light_pot
+          turn_off:
+            service: light.turn_off
+            data: 
+              entity_id: 
+                - light.power_christmas_light_pot
+
+# --- Media --- # 
+# - Accessories - #
+        power_living_area_media_accessories:
+          friendly_name: "Media Accessories"
+          value_template: "{{ states('light.power_living_area_media_accessories') }}"
+          turn_on:
+            service: light.turn_on
+            data: 
+              entity_id: light.power_living_area_media_accessories
+          turn_off:
+            service: light.turn_off
+            data: 
+              entity_id: light.power_living_area_media_accessories
+# - Hue Sync Box - #
+        power_living_area_media_hue_sync_box:
+          friendly_name: "Hue Sync Box"
+          value_template: "{{ states('light.power_living_area_media_hue_sync_box') }}"
+          turn_on:
+            service: light.turn_on
+            data: 
+              entity_id: light.power_living_area_media_hue_sync_box
+          turn_off:
+            service: light.turn_off
+            data: 
+              entity_id: light.power_living_area_media_hue_sync_box
+
+# --- Misc --- # 
+# - Dryer - #
+        power_misc_dryer:
+          friendly_name: "Dryer"
+          value_template: "{{ states('light.dryer') }}"
+          turn_on:
+            service: light.turn_on
+            data: 
+              entity_id: light.dryer
+          turn_off:
+            service: light.turn_off
+            data: 
+              entity_id: light.dryer 
+# - Desk Chargers - #
+        power_study_desk_chargers:
+          friendly_name: "Desk Chargers"
+          value_template: "{{ states('light.power_study_desk_chargers') }}"
+          turn_on:
+            service: light.turn_on
+            data: 
+              entity_id: light.power_study_desk_chargers
+          turn_off:
+            service: light.turn_off
+            data: 
+              entity_id: light.power_study_desk_chargers            
+
+# --- Modes --- #
+# -- Bedroom -- #
+# - Guest - #
+        mode_bedroom_guest:
+          friendly_name: "Cooking"
+          value_template: "{{ states('input_boolean.mode_bedroom_guest') }}"
+          turn_on:
+            service: input_boolean.turn_on
+            data: 
+              entity_id: input_boolean.mode_bedroom_guest
+          turn_off:
+            service: input_boolean.turn_off
+            data: 
+              entity_id: input_boolean.mode_bedroom_guest
+# -- Kitchen -- #
+# - Cooking - #
+        mode_kitchen_cooking:
+          friendly_name: "Cooking"
+          value_template: "{{ states('input_boolean.mode_kitchen_cooking') }}"
+          turn_on:
+            service: input_boolean.turn_on
+            data: 
+              entity_id: input_boolean.mode_kitchen_cooking
+          turn_off:
+            service: input_boolean.turn_off
+            data: 
+              entity_id: input_boolean.mode_kitchen_cooking
+# - Dining - #
+        mode_kitchen_dining:
+          friendly_name: "Dining"
+          value_template: "{{ states('input_boolean.mode_kitchen_dining') }}"
+          turn_on:
+            service: input_boolean.turn_on
+            data: 
+              entity_id: input_boolean.mode_kitchen_dining
+          turn_off:
+            service: input_boolean.turn_off
+            data: 
+              entity_id: input_boolean.mode_kitchen_dining
+# -- Living Area -- #
+# - Entertainment - #
+        mode_living_area_entertainment:
+          friendly_name: "Entertainment"
+          value_template: "{{ states('input_boolean.mode_living_area_entertainment') }}"
+          turn_on:
+            service: input_boolean.turn_on
+            data: 
+              entity_id: input_boolean.mode_living_area_entertainment
+          turn_off:
+            service: input_boolean.turn_off
+            data: 
+              entity_id: input_boolean.mode_living_area_entertainment                           
+# -- Study -- #
+# - Gaming - #
+        mode_study_gaming:
+          friendly_name: "Gaming"
+          value_template: "{{ states('input_boolean.mode_study_gaming') }}"
+          turn_on:
+            service: input_boolean.turn_on
+            data: 
+              entity_id: input_boolean.mode_study_gaming
+          turn_off:
+            service: input_boolean.turn_off
+            data: 
+              entity_id: input_boolean.mode_study_gaming   
+# - Guest - #
+        mode_study_guest:
+          friendly_name: "Guest(s)"
+          value_template: "{{ states('input_boolean.mode_study_guest') }}"
+          turn_on:
+            service: input_boolean.turn_on
+            data: 
+              entity_id: input_boolean.mode_study_guest
+          turn_off:
+            service: input_boolean.turn_off
+            data: 
+              entity_id: input_boolean.mode_study_guest
+# - WFH - #
+        mode_study_wfh:
+          friendly_name: "Working From Home"
+          value_template: "{{ states('input_boolean.mode_study_wfh') }}"
+          turn_on:
+            service: input_boolean.turn_on
+            data: 
+              entity_id: input_boolean.mode_study_wfh
+          turn_off:
+            service: input_boolean.turn_off
+            data: 
+              entity_id: input_boolean.mode_study_wfh 
+
+# -- Alarm Clocks -- #
+# - Bedroom - #
+        alarm_clock_bedroom:
+          friendly_name: "Alarm Clock"
+          value_template: "{{ states('input_boolean.alarm_clock_bedroom') }}"
+          turn_on:
+            service: input_boolean.turn_on
+            data: 
+              entity_id: input_boolean.alarm_clock_bedroom
+          turn_off:
+            service: input_boolean.turn_off
+            data: 
+              entity_id: input_boolean.alarm_clock_bedroom 
+# - Study - #
+        alarm_clock_study:
+          friendly_name: "Alarm Clock"
+          value_template: "{{ states('input_boolean.alarm_clock_study') }}"
+          turn_on:
+            service: input_boolean.turn_on
+            data: 
+              entity_id: input_boolean.alarm_clock_study
+          turn_off:
+            service: input_boolean.turn_off
+            data: 
+              entity_id: input_boolean.alarm_clock_study     

@@ -1,0 +1,1988 @@
+- id: '1574066985091'
+  alias: System - Presence - Departure
+  description: Set to away when everyone leaves
+  trigger:
+  - entity_id: group.presence
+    from: home
+    platform: state
+    to: not_home
+  condition: []
+  action:
+  - data:
+      entity_id: alarm_control_panel.aarlo_beefeyes
+    entity_id: alarm_control_panel.aarlo_beefeyes
+    service: alarm_control_panel.alarm_arm_away
+  - data:
+      entity_id: switch.cleaning_schedule
+    service: switch.turn_on
+  - data:
+      entity_id: group.departure_automations
+    service: automation.turn_off
+  - data:
+      entity_id: group.lights_flat
+    service: light.turn_off
+- id: '1574067998310'
+  alias: System - Presence - Arrival (Day)
+  description: Set to home when someone arrives during the day
+  trigger:
+  - entity_id: sensor.presence_mode
+    from: Away
+    platform: state
+    to: Home
+  condition:
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Day
+  action:
+  - data:
+      entity_id: group.lighting_automations_arrival_day
+    service: automation.turn_on
+- id: '1574123676207'
+  alias: Component - Alarm Clock (Bedroom)
+  trigger:
+  - platform: template
+    value_template: '{{ states(''sensor.time'') == ( states.input_datetime.alarm_wakeup_time_bedroom.attributes.timestamp
+      | int - 1800 ) | timestamp_custom(''%H:%M'', False) }}'
+  condition:
+  - condition: state
+    entity_id: input_boolean.alarm_weekday_bedroom
+    state: 'on'
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: input_boolean.alarm_weekend_bedroom
+      state: 'on'
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+  - condition: state
+    entity_id: sensor.presence_mode
+    state: Home
+  - condition: state
+    entity_id: switch.alarm_clock_bedroom
+    state: 'On'
+  action:
+  - data:
+      brightness: 1
+      color_name: blue
+      entity_id: light.bedroom
+    service: light.turn_on
+  - data:
+      brightness: 255
+      profile: energize
+      transition: 1800
+    entity_id: light.bedroom
+    service: light.turn_on
+  - delay: 00:30
+  - entity_id: automation.system_automations_day
+    service: automation.trigger
+- id: '1574462735995'
+  alias: Lighting - Arrival (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.presence_mode
+    from: Away
+    platform: state
+    to: Home
+  condition:
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Day
+  - below: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_hallway
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.hallway_ceiling_lamp
+      profile: energize
+    service: light.turn_on
+- id: '1574463493889'
+  alias: Lighting - Arrival (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.presence_mode
+    from: Away
+    platform: state
+    to: Home
+  condition:
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Night
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.hallway_ceiling_lamp
+    service: light.turn_on
+- id: '1574464742537'
+  alias: Lighting - Hallway (On - Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_hallway
+    from: Inactive
+    platform: state
+    to: Active
+  condition:
+  - condition: state
+    entity_id: light.hallway_ceiling_lamp
+    state: 'off'
+  action:
+  - data:
+      brightness: 5
+      color_name: blue
+      entity_id: light.hallway_ceiling_lamp
+    service: light.turn_on
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.hallway_ceiling_lamp
+      transition: 10
+    service: light.turn_on
+- id: '1574467041726'
+  alias: Lighting - Hallway  (On - Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_hallway
+    from: Inactive
+    platform: state
+    to: Active
+  condition:
+  - condition: state
+    entity_id: light.hallway_ceiling_lamp
+    state: 'off'
+  - condition: state
+    entity_id: switch.mode_living_area_entertainment
+    state: 'off'
+  - condition: state
+    entity_id: switch.mode_study_gaming
+    state: 'off'
+  - below: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_hallway
+  action:
+  - data:
+      brightness: 20
+      entity_id: light.hallway_ceiling_lamp
+      profile: energize
+    service: light.turn_on
+  - data:
+      brightness: 200
+      entity_id: light.hallway_ceiling_lamp
+      profile: energize
+      transition: 5
+    service: light.turn_on
+- id: '1574468349097'
+  alias: Lighting - Hallway (Off - Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_hallway
+    for: 00:10:00
+    from: Active
+    platform: state
+    to: Inactive
+  condition: []
+  action:
+  - data:
+      entity_id: light.hallway_ceiling_lamp
+      transition: 30
+    service: light.turn_off
+- id: '1574469398825'
+  alias: Lighting - Kitchen (On - Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_kitchen
+    from: Inactive
+    platform: state
+    to: Active
+  condition:
+  - condition: state
+    entity_id: light.kitchen_zone
+    state: 'off'
+  - condition: state
+    entity_id: switch.mode_living_area_entertainment
+    state: 'off'
+  action:
+  - data:
+      brightness: 10
+      color_name: blue
+      entity_id: light.kitchen_zone
+    service: light.turn_on
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.kitchen_zone
+      transition: 5
+    service: light.turn_on
+- id: '1574469953189'
+  alias: Lighting - Kitchen (On - Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_kitchen
+    from: Inactive
+    platform: state
+    to: Active
+  condition:
+  - condition: state
+    entity_id: light.kitchen_zone
+    state: 'off'
+  - below: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_kitchen
+  - condition: state
+    entity_id: switch.mode_living_area_entertainment
+    state: 'off'
+  action:
+  - data:
+      brightness: 20
+      entity_id: light.kitchen_zone
+      profile: energize
+    service: light.turn_on
+  - data:
+      brightness: 200
+      entity_id: light.kitchen_zone
+      profile: energize
+      transition: 5
+    service: light.turn_on
+- id: '1574470309036'
+  alias: Lighting - Kitchen (Off - Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_kitchen
+    for: 00:10:00
+    from: Active
+    platform: state
+    to: Inactive
+  condition:
+  - condition: state
+    entity_id: light.kitchen_ceiling_spotlight_2
+    state: 'off'
+  action:
+  - data:
+      entity_id: light.kitchen_zone
+      transition: 30
+    service: light.turn_off
+- id: '1574471209217'
+  alias: Lighting - Study (On - Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_study
+    from: Inactive
+    platform: state
+    to: Active
+  condition:
+  - condition: state
+    entity_id: light.study_zone
+    state: 'off'
+  - condition: state
+    entity_id: switch.mode_study_gaming
+    state: 'off'
+  action:
+  - data:
+      brightness: 10
+      color_name: blue
+      entity_id: light.study_zone
+    service: light.turn_on
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.study_zone
+      transition: 5
+    service: light.turn_on
+- id: '1574471714836'
+  alias: Lighting - Study (On - Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_study
+    from: Inactive
+    platform: state
+    to: Active
+  condition:
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Day
+  - below: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_study
+  - condition: state
+    entity_id: light.study_zone
+    state: 'off'
+  - condition: state
+    entity_id: switch.mode_study_gaming
+    state: 'off'
+  action:
+  - data:
+      brightness: 20
+      entity_id: light.study_zone
+      profile: energize
+    service: light.turn_on
+  - data:
+      brightness: 200
+      entity_id: light.study_zone
+      profile: energize
+      transition: 5
+    service: light.turn_on
+- id: '1574471898250'
+  alias: Lighting - Study (Off - Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_study
+    for: 00:10:00
+    from: Active
+    platform: state
+    to: Inactive
+  condition:
+  - condition: state
+    entity_id: light.study_ceiling_lamp
+    state: 'off'
+  - condition: state
+    entity_id: switch.mode_study_wfh
+    state: 'off'
+  action:
+  - data:
+      entity_id: light.study_zone
+      transition: 30
+    service: light.turn_off
+- id: '1574472076773'
+  alias: Lighting - Bedroom (On - Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_bedroom
+    from: Inactive
+    platform: state
+    to: Active
+  condition:
+  - condition: state
+    entity_id: light.bedroom_zone
+    state: 'off'
+  action:
+  - data:
+      brightness: 10
+      color_name: blue
+      entity_id: light.bedroom_zone
+    service: light.turn_on
+  - data:
+      brightness: 100
+      entity_id: light.bedroom_zone
+      profile: blue
+      transition: 5
+    service: light.turn_on
+- id: '1574472266896'
+  alias: Lighting - Bedroom (On - Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_bedroom
+    from: Inactive
+    platform: state
+    to: Active
+  condition:
+  - below: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_bedroom
+  - condition: state
+    entity_id: light.bedroom_zone
+    state: 'off'
+  action:
+  - data:
+      brightness: 20
+      entity_id: light.bedroom_zone
+      profile: energize
+    service: light.turn_on
+  - data:
+      brightness: 200
+      entity_id: light.bedroom_zone
+      profile: energize
+      transition: 5
+    service: light.turn_on
+- id: '1574472348470'
+  alias: Lighting - Bedroom (Off - Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_bedroom
+    for: 00:10:00
+    from: Active
+    platform: state
+    to: Inactive
+  condition:
+  - condition: state
+    entity_id: light.bedroom_ceiling_lamp
+    state: 'off'
+  action:
+  - data:
+      entity_id: light.bedroom_zone
+      transition: 30
+    service: light.turn_off
+- id: '1574472480930'
+  alias: Lighting - Living Area (On - Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_living_area
+    from: Inactive
+    platform: state
+    to: Active
+  condition:
+  - condition: state
+    entity_id: light.living_area_zone
+    state: 'off'
+  - below: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_living_area
+  - condition: state
+    entity_id: switch.mode_living_area_entertainment
+    state: 'off'
+  action:
+  - data:
+      brightness: 20
+      entity_id: light.living_area_zone
+      profile: energize
+    service: light.turn_on
+  - data:
+      brightness: 200
+      entity_id: light.living_area_zone
+      profile: energize
+      transition: 5
+    service: light.turn_on
+- id: '1574472688072'
+  alias: Lighting - Living Area (On - Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_living_area
+    from: Inactive
+    platform: state
+    to: Active
+  condition:
+  - condition: state
+    entity_id: light.living_area_zone
+    state: 'off'
+  - condition: state
+    entity_id: switch.mode_living_area_entertainment
+    state: 'off'
+  action:
+  - data:
+      brightness: 10
+      color_name: blue
+      entity_id: light.living_area_zone
+    service: light.turn_on
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light_living_area_zone
+      transition: 10
+    service: light.turn_on
+- id: '1574472808206'
+  alias: Lighting - Living Area (Off - Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_living_area
+    for: 00:10:00
+    from: Active
+    platform: state
+    to: Inactive
+  condition:
+  - condition: state
+    entity_id: light.living_area_ceiling_lamp
+    state: 'off'
+  - condition: state
+    entity_id: sensor.harmony_living_area
+    state: Standby
+  action:
+  - data:
+      entity_id: light.living_area_zone
+      transition: 30
+    service: light.turn_off
+- id: '1574513730121'
+  alias: Lighting Transition - Kitchen Zone (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition:
+  - condition: state
+    entity_id: light.kitchen_zone
+    state: 'on'
+  - condition: state
+    entity_id: light.kitchen_ceiling_spotlight_2
+    state: 'off'
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.kitchen_zone
+      transition: 20
+    service: light.turn_on
+- id: '1574514309855'
+  alias: Lighting Transition - Kitchen Zone (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: night
+    platform: state
+    to: day
+  condition:
+  - condition: state
+    entity_id: light.kitchen_zone
+    state: 'on'
+  - condition: state
+    entity_id: light.kitchen_ceiling_spotlight_2
+    state: 'off'
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.kitchen_zone
+      profile: energize
+      transition: 20
+    service: light.turn_on
+- id: '1574602809845'
+  alias: Lighting - Bedroom (Off - Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_bedroom
+    for: 00:05:00
+    from: Active
+    platform: state
+    to: Inactive
+  condition:
+  - condition: state
+    entity_id: light.bedroom_ceiling_lamp
+    state: 'off'
+  action:
+  - data:
+      entity_id: light.bedroom_zone
+      transition: 30
+    service: light.turn_off
+- id: '1574604664839'
+  alias: Lighting - Hallway (Off - Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_hallway
+    for: 00:05:00
+    from: Active
+    platform: state
+    to: Inactive
+  condition: []
+  action:
+  - data:
+      entity_id: light.hallway_ceiling_lamp
+      transition: 30
+    service: light.turn_off
+- id: '1574619222103'
+  alias: Lighting - Kitchen (Off - Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_kitchen
+    for: 00:05:00
+    from: Active
+    platform: state
+    to: Inactive
+  condition:
+  - condition: state
+    entity_id: light.kitchen_ceiling_spotlight_2
+    state: 'off'
+  action:
+  - data:
+      entity_id: light.kitchen_zone
+      transition: 30
+    service: light.turn_off
+- id: '1574619590244'
+  alias: Lighting - Living Area (Off - Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_living_area
+    for: 00:05:00
+    from: Active
+    platform: state
+    to: Inactive
+  condition:
+  - condition: state
+    entity_id: light.living_area_ceiling_lamp
+    state: 'off'
+  - condition: state
+    entity_id: sensor.harmony_living_area
+    state: Standby
+  action:
+  - data:
+      entity_id: light.living_area_zone
+      transition: 30
+    service: light.turn_off
+- id: '1574631009843'
+  alias: Lighting - Study (Off - Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.motion_study
+    for: 00:05:00
+    from: Active
+    platform: state
+    to: Inactive
+  condition:
+  - condition: state
+    entity_id: light.study_ceiling_lamp
+    state: 'off'
+  - condition: state
+    entity_id: switch.mode_study_wfh
+    state: 'off'
+  action:
+  - data:
+      entity_id: light.study_zone
+      transition: 30
+    service: light.turn_off
+- id: '1574970383587'
+  alias: Mode -WFH - Enable
+  description: ''
+  trigger:
+  - at: 05:30
+    platform: time
+  condition:
+  - condition: state
+    entity_id: calendar.day_type_working_from_home
+    state: 'on'
+  action:
+  - data:
+      entity_id: input_datetime.alarm_wakeup_time_bedroom
+      time: 08:00
+    service: input_datetime.set_datetime
+- id: '1574970562319'
+  alias: Mode - Study WFH - Power On
+  description: ''
+  trigger:
+  - at: 08:00
+    platform: time
+  condition:
+  - condition: state
+    entity_id: calendar.day_type_working_from_home
+    state: 'on'
+  action:
+  - data:
+      entity_id: switch.power_study_desk_docking_station
+    service: switch.turn_on
+  - data: {}
+    entity_id: switch.mode_study_wfh
+    service: switch.turn_on
+- id: '1575006767920'
+  alias: Lighting Transition - Hallway (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: light.hallway_room
+    state: 'on'
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.hallway_room
+      profile: energize
+      transition: 20
+    service: light.turn_on
+- id: '1575006906576'
+  alias: Lighting Transition - Hallway (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition:
+  - condition: state
+    entity_id: light.hallway_room
+    state: 'on'
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.hallway_room
+      transition: 20
+    service: light.turn_on
+- id: '1575007039855'
+  alias: Lighting Transition - Bedroom Zone (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: light.bedroom_zone
+    state: 'on'
+  - condition: state
+    entity_id: light.bedroom_ceiling_lamp
+    state: 'off'
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.bedroom_zone
+      profile: energize
+      transition: 20
+    service: light.turn_on
+- id: '1575007195610'
+  alias: Lighting Transition - Bedroom Zone (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition:
+  - condition: state
+    entity_id: light.bedroom_zone
+    state: 'on'
+  - condition: state
+    entity_id: light.bedroom_ceiling_lamp
+    state: 'off'
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.bedroom_zone
+      transition: 20
+    service: light.turn_on
+- id: '1575014115611'
+  alias: Lighting Transition - Study Zone (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: light.study_ceiling_lamp
+    state: 'off'
+  - condition: state
+    entity_id: light.study_zone
+    state: 'on'
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.study_zone
+      profile: energize
+      transition: 20
+    service: light.turn_on
+- id: '1575014192549'
+  alias: Lighting Transition - Study Zone (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition:
+  - condition: state
+    entity_id: light.study_ceiling_lamp
+    state: 'off'
+  - condition: state
+    entity_id: light.study_zone
+    state: 'on'
+  - condition: state
+    entity_id: switch.mode_study_wfh
+    state: 'Off'
+  - condition: state
+    entity_id: switch.mode_study_gaming
+    state: ''
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.study_zone
+      transition: 20
+    service: light.turn_on
+- id: '1575014277408'
+  alias: Lighting Transition - Living Area Zone (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: light.living_area_ceiling_lamp
+    state: 'off'
+  - condition: state
+    entity_id: light.living_area_zone
+    state: 'on'
+  - condition: state
+    entity_id: switch.mode_entertainment
+    state: 'off'
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.living_area_zone
+      profile: energize
+      transition: 20
+    service: light.turn_on
+- id: '1575014357950'
+  alias: Lighting Transition - Living Area Zone (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition:
+  - condition: state
+    entity_id: light.living_area_ceiling_lamp
+    state: 'off'
+  - condition: state
+    entity_id: light.living_area_zone
+    state: 'on'
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.living_area_zone
+      transition: 20
+    service: light.turn_on
+- id: '1575025870984'
+  alias: Lighting Transition - Bedroom Room (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: light.bedroom_ceiling_lamp
+    state: 'on'
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.bedroom_room
+      profile: energize
+      transition: 20
+    service: light.turn_on
+- id: '1575025931845'
+  alias: Lighting Transition - Bedroom Room (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition:
+  - condition: state
+    entity_id: light.bedroom_ceiling_lamp
+    state: 'on'
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.bedroom_room
+      transition: 20
+    service: light.turn_on
+- id: '1575026043311'
+  alias: Lighting Transition - Kitchen Room (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: light.kitchen_ceiling_spotlight_2
+    state: 'on'
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.kitchen_room
+      profile: energize
+      transition: 20
+    service: light.turn_on
+- id: '1575026111073'
+  alias: Lighting Transition - Kitchen Room (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition:
+  - condition: state
+    entity_id: light.kitchen_ceiling_spotlight_2
+    state: 'on'
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.kitchen_room
+      transition: 20
+    service: light.turn_on
+- id: '1575027188835'
+  alias: Lighting Transition - Living Area Room (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: light.living_area_ceiling_lamp
+    state: 'on'
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.living_area_room
+      profile: energize
+      transition: 20
+    service: light.turn_on
+- id: '1575027331765'
+  alias: Lighting Transition - Living Area Room (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition:
+  - condition: state
+    entity_id: light.living_area_ceiling_lamp
+    state: 'on'
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.living_area_room
+      transition: 20
+    service: light.turn_on
+- id: '1575027569686'
+  alias: Lighting Transition - Study Room (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: light.study_ceiling_lamp
+    state: 'on'
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.study_room
+      profile: energize
+      transition: 20
+    service: light.turn_on
+- id: '1575027627203'
+  alias: Lighting Transition - Study Room (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition:
+  - condition: state
+    entity_id: light.study_ceiling_lamp
+    state: 'on'
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.study_room
+      transition: 20
+    service: light.turn_on
+- id: '1575027723818'
+  alias: Lighting Transition - Dining Area (Day)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: light.dining_area_ceiling_lamp
+    state: 'on'
+  action:
+  - data:
+      brightness: 200
+      entity_id: light.dining_area
+      profile: energize
+      transition: 20
+    service: light.turn_on
+- id: '1575027863826'
+  alias: Lighting Transition - Dining Area (Night)
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition:
+  - condition: state
+    entity_id: light.dining_area_ceiling_lamp
+    state: 'on'
+  action:
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.dining_area
+      transition: 20
+    service: light.turn_on
+- id: '1575082873011'
+  alias: Power - Docking Station (On)
+  description: ''
+  trigger:
+  - entity_id: switch.power_study_desk_docking_station
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.power_study_desk_peripherals
+    service: switch.turn_on
+- id: '1575082966097'
+  alias: Power - Docking Station (Off)
+  description: ''
+  trigger:
+  - entity_id: switch.power_study_desk_docking_station
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: switch.power_study_desk_desktop
+    state: 'off'
+  action:
+  - data: {}
+    entity_id: switch.power_study_desk_peripherals
+    service: switch.turn_off
+- id: '1575083062546'
+  alias: Power - Desktop (On)
+  description: ''
+  trigger:
+  - entity_id: switch.power_study_desk_desktop
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - entity_id: switch.power_study_desk_peripherals
+    service: switch.turn_on
+- id: '1575083121112'
+  alias: Power - Desktop (Off)
+  description: ''
+  trigger:
+  - entity_id: switch.power_study_desk_desktop
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: switch.power_study_desk_docking_station
+    state: 'off'
+  action:
+  - data: {}
+    entity_id: switch.power_study_desk_peripherals
+    service: switch.turn_off
+- id: '1575639511011'
+  alias: System - Presence - Arrival (Night)
+  description: Set to home when someone arrives during the night
+  trigger:
+  - entity_id: sensor.presence_mode
+    from: Away
+    platform: state
+    to: Home
+  condition:
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Night
+  action:
+  - data:
+      entity_id: group.lighting_automations_arrival_night
+    service: automation.turn_on
+- id: '1575683570520'
+  alias: System - Automations - Day
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: sensor.presence_mode
+    state: Home
+  action:
+  - data:
+      entity_id: group.lighting_automations_day
+    service: automation.turn_on
+  - data:
+      entity_id: group.lighting_automations_night
+    service: automation.turn_off
+  - delay: '05'
+  - data:
+      entity_id: group.lighting_automations_tod_day_transitions
+    service: automation.turn_off
+  - data:
+      entity_id: group.lighting_automations_tod_night_transitions
+    service: automation.turn_on
+- id: '1575683707688'
+  alias: System - Automations - Night
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Day
+    platform: state
+    to: Night
+  condition: []
+  action:
+  - data:
+      entity_id: group.lighting_automations_day
+    service: automation.turn_off
+  - data:
+      entity_id: group.lighting_automations_night
+    service: automation.turn_on
+  - delay: '05'
+  - data:
+      entity_id: group.lighting_automations_tod_night_transitions
+    service: automation.turn_off
+  - data:
+      entity_id: group.lighting_automations_tod_day_transitions
+    service: automation.turn_on
+- id: '1575807510817'
+  alias: Climate - Living Area Fan - On
+  description: ''
+  trigger:
+  - above: '24'
+    entity_id: sensor.temperature_thermostat_living_area
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: sensor.presence_mode
+    state: Home
+  action:
+  - data:
+      entity_id: switch.power_fan_living_area
+    service: switch.turn_on
+- id: '1575807728921'
+  alias: Climate - Living Area Fan - Off
+  description: ''
+  trigger:
+  - below: '22'
+    entity_id: sensor.temperature_thermostat_living_area
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: sensor.presence_mode
+    state: Home
+  - condition: state
+    entity_id: switch.power_fan_living_area
+    state: 'on'
+  action:
+  - data:
+      entity_id: switch.power_fan_living_area
+    service: switch.turn_off
+- id: '1575808362391'
+  alias: Climate - Bedroom Fan - On
+  description: ''
+  trigger:
+  - above: '24'
+    entity_id: sensor.temperature_thermostat_bedroom
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: sensor.presence_mode
+    state: Home
+  action:
+  - data:
+      entity_id: switch.power_fan_bedroom
+    service: switch.turn_on
+- id: '1575808914292'
+  alias: Climate - Bedroom Fan - Off
+  description: ''
+  trigger:
+  - below: '22'
+    entity_id: sensor.temperature_thermostat_bedroom
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: switch.power_fan_bedroom
+    state: 'on'
+  action:
+  - data:
+      entity_id: switch.power_fan_bedroom
+    service: switch.turn_off
+- id: '1575809504171'
+  alias: Climate - Study Fan - On
+  description: ''
+  trigger:
+  - above: '24'
+    entity_id: sensor.temperature_thermostat_study
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      entity_id: switch.power_fan_study
+    service: switch.turn_on
+- id: '1575809751229'
+  alias: Climate - Study Fan - Off
+  description: ''
+  trigger:
+  - below: '22'
+    entity_id: sensor.temperature_thermostat_study
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: switch.power_fan_study
+    state: 'on'
+  action:
+  - data:
+      entity_id: switch.power_fan_study
+    service: switch.turn_off
+- id: '1575889952567'
+  alias: System - Presence - Arrival
+  description: ''
+  trigger:
+  - entity_id: sensor.presence_mode
+    from: Away
+    platform: state
+    to: Home
+  condition: []
+  action:
+  - data:
+      entity_id: alarm_control_panel.aarlo_beefeyes
+    service: alarm_control_panel.alarm_disarm
+  - data:
+      entity_id: switch.cleaning_schedule
+    service: switch.turn_off
+  - data:
+      entity_id: group.arrival_automations
+    service: automation.turn_on
+- id: '1576367132540'
+  alias: 'Christmas - Presence - Arrival '
+  description: ''
+  trigger:
+  - entity_id: sensor.presence_mode
+    from: Away
+    platform: state
+    to: Home
+  condition: []
+  action:
+  - entity_id: alarm_control_panel.aarlo_beefeyes
+    service: alarm_control_panel.alarm_disarm
+  - entity_id: switch.cleaning_schedule
+    service: switch.turn_off
+  - data:
+      entity_id: group.arrival_automations
+    service: automation.turn_on
+  - data:
+      entity_id: group.lights_christmas
+    service: switch.turn_on
+- id: '1576369636410'
+  alias: Christmas - Automations - On
+  description: ''
+  trigger:
+  - entity_id: calendar.christmas
+    from: 'Off'
+    platform: state
+    to: 'On'
+  condition: []
+  action:
+  - data:
+      entity_id: group.system_presence_automations
+    entity_id: automation.system_presence_arrival
+    service: automation.turn_off
+  - data:
+      entity_id: group.christmas_automations
+    service: automation.turn_on
+  - entity_id: automation.christmas_automations_on
+    service: automation.turn_off
+- id: '1576371431584'
+  alias: Christmas - Lights - Off
+  description: ''
+  trigger:
+  - at: 01:00
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: group.lights_christmas
+    service: switch.turn_off
+- id: '1576371736119'
+  alias: Christmas - Lights - On
+  description: ''
+  trigger:
+  - entity_id: sensor.time_of_day
+    from: Night
+    platform: state
+    to: Day
+  condition:
+  - condition: state
+    entity_id: sensor.presence_mode
+    state: Home
+  action:
+  - data:
+      entity_id: group.lights_christmas
+    service: switch.turn_on
+- id: '1576372030733'
+  alias: Christmas - Automations - Off
+  description: ''
+  trigger:
+  - entity_id: calendar.christmas
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      entity_id: group.christmas_automations
+    service: automation.turn_off
+  - entity_id: automation.christmas_automations_on
+    service: automation.turn_on
+  - data:
+      entity_id: group.system_presence_automations
+    service: automation.turn_on
+  - entity_id: automation.christmas_automations_off
+    service: automation.turn_off
+- id: '1576486528967'
+  alias: System - Backup - Daily
+  description: ''
+  trigger:
+    platform: time
+    at: 02:30:00
+  condition:
+    condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+    - sun
+  action:
+    service: auto_backup.snapshot_full
+    data_template:
+      name: 'DailyBackup: {{ now().strftime(''%A, %B %-d, %Y'') }}'
+      keep_days: 7
+- id: '1576489058493'
+  alias: System - Restart
+  description: ''
+  trigger:
+  - at: '11:45:00'
+    platform: time
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+    - sun
+  - condition: state
+    entity_id: sensor.presence_mode
+    state: Away
+  action:
+  - delay: 00:00:05
+  - service: homeassistant.restart
+- id: '1576583945475'
+  alias: Christmas - Presence - Departure
+  description: ''
+  trigger:
+  - entity_id: sensor.presence_mode
+    from: Home
+    platform: state
+    to: Away
+  condition: []
+  action:
+  - entity_id: alarm_control_panel.aarlo_beefeyes
+    service: alarm_control_panel.alarm_arm_away
+  - data:
+      entity_id: switch.cleaning_schedule
+    service: switch.turn_on
+  - data:
+      entity_id: group.departure_automations
+    service: automation.turn_off
+  - data:
+      entity_id: group.lights_flat
+    service: light.turn_off
+  - data:
+      entity_id: group.lights_christmas
+    service: switch.turn_off
+- id: '1576874726777'
+  alias: Power - Media Devices (Off)
+  description: ''
+  trigger:
+  - entity_id: sensor.harmony_living_area
+    for: 00:05:00
+    platform: state
+    to: Standby
+  condition: []
+  action:
+  - entity_id: switch.power_living_area_media_tv
+    service: switch.turn_off
+  - entity_id: switch.power_living_area_media_hue_sync_box
+    service: switch.turn_off
+  - delay: 01:00:00
+  - entity_id: switch.power_living_area_media_accessories
+    service: switch.turn_off
+- id: '1576874890978'
+  alias: Power - Bedroom TV (Off)
+  description: ''
+  trigger:
+  - entity_id: sensor.harmony_bedroom
+    for: 00:05
+    platform: state
+    to: Standby
+  condition: []
+  action:
+  - entity_id: switch.power_media_bedroom_tv
+    service: switch.turn_off
+- id: '1576976087342'
+  alias: Power - Media - Console Updates
+  description: ''
+  trigger:
+  - at: 04:30
+    platform: time
+  condition: []
+  action:
+  - entity_id: switch.power_living_area_media_ps4
+    service: switch.turn_on
+  - entity_id: switch.power_living_area_media_xboxone
+    service: switch.turn_on
+  - delay: 01:30:00
+  - entity_id: switch.power_living_area_media_ps4
+    service: switch.turn_off
+  - entity_id: switch.power_living_area_media_xboxone
+    service: switch.turn_off
+- id: '1577172110868'
+  alias: System - Presence - Away
+  description: ''
+  trigger:
+  - entity_id: sensor.presence_mode
+    for: 01:00:00
+    from: Home
+    platform: state
+    to: Away
+  condition:
+  - condition: state
+    entity_id: sensor.whereabouts
+    state: Away
+  action:
+  - entity_id: switch.cleaning_schedule
+    service: switch.turn_off
+  - entity_id: input_boolean.alarm_clock
+    service: input_boolean.turn_off
+- id: '1577849075513'
+  alias: Mode - Living Area Entertainment (On)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_living_area_entertainment
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - entity_id: light.kitchen
+    service: light.turn_off
+  - entity_id: light.hallway
+    service: light.turn_off
+  - data: {}
+    entity_id: light.living_area_ceiling_lamp
+    service: light.turn_off
+  - entity_id: light.living_area_bloom_l
+    service: light.turn_off
+  - entity_id: light.living_area_bloom_r
+    service: light.turn_off
+  - entity_id: cover.blind_living_area_bay_window
+    service: cover.close_cover
+- id: '1578867451031'
+  alias: Mode - Living Area Entertainment - Off - Day (Normal)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_living_area_entertainment
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - above: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_living_area
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Day
+  action:
+  - entity_id: cover.blind_living_area_bay_window
+    service: cover.open_cover
+  - entity_id: light.living_area_zone
+    service: light.turn_off
+- id: '1578871971049'
+  alias: Mode - Living Area Entertainment - Off - Day (Dark)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_living_area_entertainment
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - below: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_living_area
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Day
+  action:
+  - entity_id: cover.blind_living_area_bay_window
+    service: cover.open_cover
+  - data:
+      brightness: 20
+      entity_id: light.kitchen_zone
+      profile: energize
+    service: light.turn_on
+  - data:
+      brightness: 200
+      entity_id: light.kitchen_zone
+      profile: energize
+      transition: 5
+    service: light.turn_on
+- id: '1578872117251'
+  alias: Mode - Living Area Entertainment - Off - Night (Normal)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_living_area_entertainment
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Night
+  action:
+  - entity_id: cover.blind_living_area_bay_window
+    service: cover.open_cover
+  - data:
+      brightness: 10
+      color_name: blue
+      entity_id: light.living_area_zone
+    service: light.turn_on
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.living_area_zone
+      transition: 5
+    service: light.turn_on
+- id: '1585525781129'
+  alias: Mode - Study Gaming (On)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_study_gaming
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.study_lightstrip_2
+    service: light.turn_off
+  - data: {}
+    entity_id: light.study_ceiling_lamp
+    service: light.turn_off
+  - data: {}
+    entity_id: light.hallway_ceiling_lamp
+    service: light.turn_off
+  - data: {}
+    entity_id: switch.mode_study_wfh
+    service: switch.turn_off
+  - data: {}
+    entity_id: group.system_gaming_automations
+    service: automation.turn_on
+- id: '1585526146884'
+  alias: Mode - Study Gaming - Off - Day (Dark)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_study_gaming
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - below: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_study
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Day
+  action:
+  - data: {}
+    entity_id: light.study_montior_backlight
+    service: light.turn_off
+  - data:
+      brightness: 20
+      entity_id: light.study_zone
+      profile: energize
+    service: light.turn_on
+  - data:
+      brightness: 200
+      entity_id: light.study_zone
+      profile: engerize
+      transition: 5
+    service: light.turn_on
+  - data: {}
+    entity_id: group.system_gaming_automations
+    service: automation.turn_off
+- id: '1585526304820'
+  alias: Mode - Study Gaming - Off - Day (Normal)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_study_gaming
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - above: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_study
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Day
+  action:
+  - data: {}
+    entity_id: light.study_montior_backlight
+    service: light.turn_off
+  - data: {}
+    entity_id: light.study_zone
+    service: light.turn_off
+  - data: {}
+    entity_id: group.system_gaming_automations
+    service: automation.turn_off
+- id: '1585526509105'
+  alias: Mode - Study Gaming - Off - Night (Normal)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_study_gaming
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Night
+  action:
+  - data: {}
+    entity_id: light.study_montior_backlight
+    service: light.turn_off
+  - data:
+      brightness: 10
+      color_name: blue
+      entity_id: light.study_zone
+    service: light.turn_on
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.study_zone
+      transition: 10
+    service: light.turn_on
+  - data: {}
+    entity_id: group.system_gaming_automations
+    service: automation.turn_off
+- id: '1585589000436'
+  alias: Mode - Study WFH - Off - Day (Dark)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_study_wfh
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - below: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_study
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Day
+  action:
+  - data:
+      brightness: 10
+      entity_id: light.study_zone
+      profile: energize
+    entity_id: light.study_zone
+    service: light.turn_on
+  - data:
+      brightness: 100
+      entity_id: light.study_zone
+      profile: energize
+      transition: 5
+    entity_id: light.study_zone
+    service: light.turn_on
+- id: '1585589268777'
+  alias: Mode - Study WFH - Off - Day (Normal)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_study_wfh
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - above: '15'
+    condition: numeric_state
+    entity_id: sensor.luminance_multi_sensor_study
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Day
+  action:
+  - data: {}
+    entity_id: light.study_zone
+    service: light.turn_off
+- id: '1585589574405'
+  alias: Mode - Study WFH (On)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_study_wfh
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.study_lightstrip_2
+    service: light.turn_off
+  - data: {}
+    entity_id: light.study_ceiling_lamp
+    service: light.turn_off
+  - data: {}
+    entity_id: switch.mode_study_gaming
+    service: switch.turn_off
+  - data: {}
+    entity_id: switch.power_study_desk_docking_station
+    service: switch.turn_on
+  - data: {}
+    entity_id: switch.power_study_desk_peripherals
+    service: switch.turn_on
+- id: '1585609528445'
+  alias: Component - Alarm Clock (Study)
+  description: ''
+  trigger:
+  - platform: template
+    value_template: '{{ states(''sensor.time'') == ( states.input_datetime.alarm_wakeup_time_study.attributes.timestamp
+      | int - 1800 ) | timestamp_custom(''%H:%M'', False) }}'
+  condition:
+  - condition: state
+    entity_id: input_boolean.alarm_weekday_study
+    state: 'on'
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: input_boolean.alarm_weekend_study
+      state: 'on'
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+  - condition: state
+    entity_id: sensor.presence_mode
+    state: Home
+  - condition: state
+    entity_id: switch.alarm_clock_study
+    state: 'On'
+  action:
+  - data:
+      brightness: 1
+      color_name: blue
+      entity_id: light.study
+    entity_id: light.study
+    service: light.turn_on
+  - data:
+      brightness: 255
+      profile: energize
+      transition: 1800
+    entity_id: light.study
+    service: light.turn_on
+  - delay: 00:30
+- id: '1585932199124'
+  alias: Mode - Study WFH - Off - Night (Normal)
+  description: ''
+  trigger:
+  - entity_id: switch.mode_study_wfh
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: sensor.time_of_day
+    state: Night
+  action:
+  - data:
+      brightness: 10
+      color_name: blue
+      entity_id: light.study_zone
+    service: light.turn_on
+  - data:
+      brightness: 100
+      color_name: blue
+      entity_id: light.study_zone
+      transition: 10
+    service: light.turn_on
+- id: '1586500417804'
+  alias: System - Time of Day - Reboot (Night)
+  description: Corrects time of day on system reboot
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition:
+  - condition: state
+    entity_id: calendar.tod_night
+    state: 'on'
+  action:
+  - data: {}
+    entity_id: input_boolean.mode_tod_night
+    service: input_boolean.turn_on
+- id: '1586500650575'
+  alias: System - Time of Day - Night
+  description: Sets Time of day to night based on Calendar
+  trigger:
+  - entity_id: calendar.tod_night
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: input_boolean.mode_tod_night
+    service: input_boolean.turn_on
+- id: '1586500761229'
+  alias: System - Time of Day - Day
+  description: ''
+  trigger:
+  - entity_id: calendar.tod_night
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: input_boolean.mode_tod_day
+    service: input_boolean.turn_on
+- id: '1586500981156'
+  alias: System - Time of Day - Swap (Day)
+  description: ''
+  trigger:
+  - entity_id: input_boolean.mode_tod_day
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: input_boolean.mode_tod_night
+    service: input_boolean.turn_off
+- id: '1586501128903'
+  alias: System - Time of Day - Swap (Night)
+  description: ''
+  trigger:
+  - entity_id: input_boolean.mode_tod_night
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: input_boolean.mode_tod_day
+    service: input_boolean.turn_off
+- id: '1586859133521'
+  alias: Alarm Clock - Bedroom - Enable
+  description: ''
+  trigger:
+  - entity_id: switch.alarm_clock_bedroom
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: automation.alarm_clock_bedroom
+    service: automation.turn_on
+  - data: {}
+    entity_id: automation.alarm_clock_bedroom_disable
+    service: automation.turn_on
+  - data: {}
+    entity_id: automation.alarm_clock_bedroom_enable
+    service: automation.turn_off
+- id: '1586859377090'
+  alias: Alarm Clock - Bedroom - Disable
+  description: ''
+  trigger:
+  - entity_id: switch.alarm_clock_bedroom
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: automation.alarm_clock_bedroom
+    service: automation.turn_off
+  - data: {}
+    entity_id: automation.alarm_clock_bedroom_enable
+    service: automation.turn_on
+  - data: {}
+    entity_id: automation.alarm_clock_bedroom_disable
+    service: automation.turn_off
+- id: '1586859534645'
+  alias: Alarm Clock - Study - Enable
+  description: ''
+  trigger:
+  - entity_id: switch.alarm_clock_study
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: automation.alarm_clock_study
+    service: automation.turn_on
+  - data: {}
+    entity_id: automation.alarm_clock_study_disable
+    service: automation.turn_on
+  - data: {}
+    entity_id: automation.alarm_clock_study_enable
+    service: automation.turn_off
+- id: '1586859642326'
+  alias: Alarm Clock - Study - Disable
+  description: ''
+  trigger:
+  - entity_id: switch.alarm_clock_study
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: automation.alarm_clock_study
+    service: automation.turn_off
+  - data: {}
+    entity_id: automation.alarm_clock_study_enable
+    service: automation.turn_on
+  - data: {}
+    entity_id: automation.alarm_clock_study_disable
+    service: automation.turn_off
+- id: '1586980021990'
+  alias: Bay Window Blinds - Closed
+  description: ''
+  trigger:
+  - entity_id: cover.blind_living_area_bay_window
+    from: open
+    platform: state
+    to: closed
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.bay_window
+    service: light.turn_off

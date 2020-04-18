@@ -1,0 +1,72 @@
+# --- Room Zones --- #
+# -- Bedroom -- #
+- platform: group
+  name: Bedroom Zone
+  entities:
+    - light.bedroom_sidelight_l 
+    - light.bedroom_sidelight_r
+    - light.bedroom_lightstrip 
+# -- Kitchen -- #
+- platform: group
+  name: Kitchen Zone
+  entities:
+    - light.kitchen_dining_ceiling_spotlight_1
+    - light.kitchen_dining_ceiling_spotlight_3
+    - light.kitchen_ceiling_spotlight_5  
+# -- Living Area -- #
+- platform: group
+  name: Living Area Zone
+  entities:
+    - light.living_area_bloom_r
+    - light.living_area_bloom_l
+    - light.living_area_media_tv_lightstrip 
+# -- Study -- #
+- platform: group
+  name: Study Zone
+  entities:
+    - light.study_gaming_wfh_bloom_l
+    - light.study_gaming_wfh_bloom_r
+    - light.study_gaming_wfh_lightstrip_1
+    - light.study_lightstrip_2
+
+# --- Mode Lighting --- #
+# -- Dining -- #
+- platform: group
+  name: Dining
+  entities:
+    - light.kitchen_dining_ceiling_spotlight_1
+    - light.kitchen_dining_ceiling_spotlight_2
+    - light.dining_area_ceiling_lamp  
+# -- Living Area Media --- #
+- platform: group
+  name: Living Area Entertainment
+  entities:
+    - light.living_area_media_tv_lightstrip
+    - light.living_area_media_sofa_backlight_left
+    - light.living_area_media_sofa_backlight_right
+    - light.living_area_media_tv_backlight_left
+    - light.living_area_media_tv_backlight_right
+    - light.living_area_media_tv_backlight_top
+# -- Study Gaming -- #
+- platform: group
+  name: Study Gaming
+  entities:
+    - light.study_gaming_bloom_l
+    - light.study_gaming_bloom_r
+    - light.study_gaming_lightstrip_1
+    - light.study_gaming_montior_backlight
+# -- Study Work From Home -- #
+- platform: group
+  name: Study WFH
+  entities:
+    - light.study_gaming_wfh_bloom_l
+    - light.study_gaming_wfh_bloom_r
+    - light.study_gaming_wfh_lightstrip_1
+
+# --- Specific Groups --- #
+# -- Bay Window -- #
+- platform: group
+  name: Bay Window
+  entities:
+    - light.living_area_bloom_r
+    - light.living_area_bloom_l

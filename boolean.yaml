@@ -1,0 +1,75 @@
+# -- Modes -- #
+# - Bedroom - #
+  mode_bedroom_guest:
+    name: Guest
+    initial: off
+    icon: mdi:account-multiple
+# - Kitchen - #
+  mode_kitchen_dining:
+    name: Dining
+    initial: off
+    icon: mdi:food
+  mode_kitchen_cooking:
+    name: Cooking
+    initial: off
+    icon: mdi:chef-hat
+# - Living Area - #
+  mode_living_area_entertainment:
+    name: Entertainment
+    initial: off
+    icon: mdi:audio-video
+# - Presence - #
+  mode_holiday:
+    name: Holiday
+    initial: off
+  mode_study_guest:
+    name: Guest(s)
+    initial: off
+    icon: mdi:account-multiple
+  mode_occupancy:
+    name: Guest
+    initial: off
+# - Study - #
+  mode_study_gaming:
+    name: Gaming
+    initial: off
+    icon: mdi:controller-classic
+  mode_study_wfh:
+    name: Working From Home
+    initial: off
+    icon: mdi:briefcase-account
+# - Time of Day - #
+  mode_tod_day:
+    name: Day
+    initial: off
+    icon: mdi:weather-sunny
+  mode_tod_night:
+    name: Night
+    initial: off
+    icon: mdi:weather-night
+
+# -- Alarm Clocks -- #
+# - Bedroom - #    
+  alarm_clock_bedroom:
+    name: "Alarm On/Off"
+    initial: on    
+  alarm_weekday_bedroom:
+    name: "Weekday"
+    initial: on
+    icon: mdi:theme-light-dark
+  alarm_weekend_bedroom:
+    name: "Weekend"
+    initial: off
+    icon: mdi:calendar-blank
+# - Study - #    
+  alarm_clock_study:
+    name: "Alarm On/Off"
+    initial: off    
+  alarm_weekday_study:
+    name: "Weekday"
+    initial: off
+    icon: mdi:theme-light-dark
+  alarm_weekend_study:
+    name: "Weekend"
+    initial: off
+    icon: mdi:calendar-blank     

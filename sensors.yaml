@@ -1,0 +1,265 @@
+# - Aarlo Plugin - #
+  - platform: aarlo
+    monitored_conditions:
+      - last_capture
+      - total_cameras
+      - captured_today
+      - signal_strength
+      - battery_level
+
+# - Time - #      
+  - platform: time_date
+    display_options:
+      - 'time'        
+
+# - System Monitor - #
+  - platform: systemmonitor
+    resources:
+      - type: processor_use
+      - type: memory_use
+      - type: memory_free      
+      - type: disk_use_percent
+        arg: /home        
+      - type: last_boot
+  - platform: rpi_power
+    text_state: true  
+
+# --- Templates --- #
+  - platform: template
+    sensors:
+
+# -- Contact Sensors -- #
+      contact_state_balcony_door:
+        friendly_name: "Balcony Door"
+        value_template: >-
+          {% if is_state('sensor.contact_sensor_balcony_door', '22') %}
+            Open
+          {% else %}
+            Closed
+          {% endif %}
+        icon_template: >-
+          {% if is_state('sensor.contact_sensor_balcony_door', '22') %}
+            mdi:door-open
+          {% else %}
+            mdi:door-closed
+          {% endif %}    
+      contact_state_front_door:
+        friendly_name: "Front Door"
+        value_template: >-
+          {% if is_state('sensor.contact_sensor_front_door', '22') %}
+            Open
+          {% else %}
+            Closed
+          {% endif %}
+        icon_template: >-
+          {% if is_state('sensor.contact_sensor_front_door', '22') %}
+            mdi:door-open
+          {% else %}
+            mdi:door-closed
+          {% endif %} 
+# -- Door Lock Sensors -- #          
+      front_door_lock_state:
+        friendly_name: "Front Door Lock"
+        value_template: >-
+          {% if is_state('lock.front_door', 'locked') %}
+            Locked
+          {% else %}
+            Unlocked
+          {% endif %}        
+        icon_template: >-
+          {% if is_state('lock.front_door', 'locked') %}
+            mdi:home-lock
+          {% else %}
+            mdi:home-lock-open
+          {% endif %}           
+# -- Misc -- #
+# - Alarm Clock - #
+      alarm_clock:
+        friendly_name: "Alarm Clock"
+        value_template: >-
+          {% if is_state('input_boolean.alarm_clock_bedroom', 'on') %}
+            On
+          {% elif is_state('input_boolean.alarm_clock_study', 'on') %}
+            On
+          {% else %}
+            Off
+          {% endif %}
+        icon_template: >-
+          {% if is_state('input_boolean.alarm_clock_bedroom', 'on') %}
+            mdi:alarm-note
+          {% elif is_state('input_boolean.alarm_clock_study', 'on') %}
+            mdi:alarm-note  
+          {% else %}
+            mdi:alarm-note-off
+          {% endif %}           
+# -- Modes -- #
+# - Whereabouts - #
+      whereabouts:
+        friendly_name: "Whereabouts"
+        value_template: >-
+          {% if is_state('calendar.activity_away_from_home', 'on') %}
+            Away
+          {% elif is_state('calendar.day_type_working_from_home', 'on') %}
+            Working From Home
+          {% elif is_state('switch.mode_study_wfh', 'on') %}
+            Working From Home                                                  
+          {% else %}
+            Home
+          {% endif %}
+        icon_template: >-
+          {% if is_state('calendar.activity_away_from_home', 'on') %}
+            mdi:airplane-takeoff 
+          {% elif is_state('switch.mode_study_wfh', 'on') %}
+            mdi:briefcase 
+          {% elif is_state('calendar.day_type_working_from_home', 'on') %}
+            mdi:briefcase-outline   
+          {% else %}
+            mdi:home
+          {% endif %}            
+# - Occupancy - #
+      occupancy_mode:
+        friendly_name: "Occupancy"
+        value_template: >-
+          {% if is_state('switch.mode_study_guest', 'on') %}
+            Guest
+          {% else %}
+            Single
+          {% endif %}
+        icon_template: >-
+          {% if is_state('switch.mode_study_guest', 'on') %}
+            mdi:account-group
+          {% else %}
+            mdi:account
+          {% endif %} 
+# - Presence - #
+      presence_mode:
+        friendly_name: "Presence"
+        value_template: >-
+          {% if is_state('group.presence', 'home') %}
+            Home
+          {% else %}
+            Away
+          {% endif %}
+        icon_template: >-
+          {% if is_state('group.presence', 'home') %}
+            mdi:home-account
+          {% else %}
+            mdi:exit-run
+          {% endif %} 
+# - Time of Day - #
+      time_of_day:
+        friendly_name: "Time of Day"
+        value_template: >-
+          {% if is_state('input_boolean.mode_tod_night', 'on') %}
+            Night
+          {% elif is_state('input_boolean.mode_tod_day', 'on') %}
+            Day
+          {% else %}
+            Day
+          {% endif %}
+        icon_template: >-
+          {% if is_state('input_boolean.mode_tod_night', 'on') %}
+            mdi:weather-night
+          {% elif is_state('input_boolean.mode_tod_day', 'on') %}
+            mdi:weather-sunny
+          {% else %}
+            mdi:weather-sunny
+          {% endif %}
+# -- Activity -- #
+# - Day Type - #
+      day_type:
+        friendly_name: "Day Type"
+        value_template: >-
+          {% if is_state('calendar.day_type_bank_holiday', 'on') %}
+            Not Working
+          {% elif is_state('calendar.day_type_office_closed', 'on') %}
+            Not Working
+          {% elif is_state('calendar.day_type_on_leave', 'on') %}
+            Not Working
+          {% elif is_state('calendar.day_type_weekend', 'on') %}
+            Weekend            
+          {% elif is_state('calendar.day_type_working_from_home', 'on') %}
+            Working From Home                                      
+          {% else %}
+            Working
+          {% endif %}
+# -- Motion Sensors -- #
+      motion_bedroom:
+        friendly_name: "Bedroom"
+        value_template: >-
+          {% if is_state('binary_sensor.motion_multi_sensor_bedroom', 'on') %}
+            Active
+          {% else %}
+            Inactive
+          {% endif %}
+      motion_hallway:
+        friendly_name: "Hallway"
+        value_template: >-
+          {% if is_state('binary_sensor.motion_multi_sensor_hallway', 'on') %}
+            Active
+          {% else %}
+            Inactive
+          {% endif %}
+      motion_kitchen:
+        friendly_name: "Kitchen"
+        value_template: >-
+          {% if is_state('binary_sensor.motion_multi_sensor_kitchen', 'on') %}
+            Active
+          {% else %}
+            Inactive
+          {% endif %} 
+      motion_living_area:
+        friendly_name: "Living Area"
+        value_template: >-
+          {% if is_state('binary_sensor.motion_multi_sensor_living_area', 'on') %}
+            Active
+          {% else %}
+            Inactive
+          {% endif %}
+      motion_study:
+        friendly_name: "Study"
+        value_template: >-
+          {% if is_state('binary_sensor.motion_multi_sensor_study', 'on') %}
+            Active
+          {% else %}
+            Inactive
+          {% endif %}                                       
+# -- Misc Devices -- #
+# - Living Room Remote - #          
+      harmony_living_area:
+        value_template: >
+          {% if is_state("remote.living_area", 'on') %}
+            {{ states.remote.living_area.attributes.current_activity }}
+          {% else %}
+            Standby
+          {% endif %}
+# - Bedroom Remote -  #          
+      harmony_bedroom:
+        value_template: >
+          {% if is_state("remote.bedroom", 'on') %}
+            {{ states.remote.bedroom.attributes.current_activity }}
+          {% else %}
+            Standby
+          {% endif %} 
+# - Vacuum - #
+      vacuum_status:
+        value_template: >
+          {% if is_state("vacuum.betty", 'docked') %}
+            Docked
+          {% elif is_state('vacuum.betty', 'cleaning') %}
+            Cleaning
+          {% elif is_state('vacuum.betty', 'paused') %}
+            Paused            
+          {% else %}
+            Warning
+          {% endif %}
+        icon_template: >-
+          {% if is_state('vacuum.betty', 'docked') %}
+            mdi:robot-vacuum-variant
+          {% elif is_state('vacuum.betty', 'cleaning') %}
+            mdi:broom
+          {% elif is_state('vacuum.betty', 'paused') %}
+            mdi:pause-circle            
+          {% else %}
+            mdi:alert-circle-outline
+          {% endif %}            

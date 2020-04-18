@@ -1,0 +1,317 @@
+# --- Automations --- #
+# - Christmas - #
+christmas_automations:
+  name: Christmas
+  entities:
+    - automation.christmas_lights_on
+    - automation.christmas_lights_off
+    - automation.christmas_presence_arrival
+    - automation.christmas_presence_departure
+    
+# - Climate - #
+climate_automations:
+  name: Climate
+  entities:
+    - automation.climate_bedroom_fan_on
+    - automation.climate_bedroom_fan_off
+    - automation.climate_living_area_fan_on
+    - automation.climate_living_area_fan_off
+    - automation.climate_study_fan_on
+    - automation.climate_study_fan_off
+
+# --- Lighting --- #
+lighting_automations:
+  name: "Lighting"
+  entities:
+    - group.lighting_automations_day
+    - group.lighting_automations_night
+    - group.lighting_automations_entertainment
+    - group.lighting_automations_transitions
+
+# -- Entertainment -- #
+# - Power - #
+lighting_automations_entertainment:
+  name: "Entertainment Lighting"
+  entities:     
+    - automation.lighting_transition_entertainment_ps4_on
+    - automation.lighting_transition_entertainment_xbox_on
+    - automation.lighting_entertainment_ps4_on
+    - automation.lighting_entertainment_xbox_on
+
+# -- Override -- #
+# - Study - #
+lighting_automations_override_study:
+  name: "Study Lighting Automation Override"
+  entities:
+    - group.lighting_off_automations_override_study
+    - group.lighting_on_automations_override_study
+    - group.lighting_transition_automation_override_study
+# Turn Off #
+lighting_off_automations_override_study:
+  name: "Automatic Turn Off"
+  entities:
+    - automation.lighting_study_off_day
+    - automation.lighting_study_off_night
+# Turn On #
+lighting_on_automations_override_study:
+  name: "Automatic Turn On"
+  entities:
+    - automation.lighting_study_on_day
+    - automation.lighting_study_on_night 
+# Transition #
+lighting_transition_automation_override_study:
+  name: "Transitional Lighting"
+  entities:
+    - automation.lighting_transition_study_room_day
+    - automation.lighting_transition_study_zone_day
+    - automation.lighting_transition_study_room_night
+    - automation.lighting_transition_study_zone_night                 
+    
+
+# -- Presence -- #
+# - Day Arrival - #
+lighting_automations_arrival_day:
+  name: "Lighting Day Arrival"
+  entities:
+    - group.lighting_automations_day
+    - group.lighting_automations_tod_night_transitions
+# - Night Arrival - #
+lighting_automations_arrival_night:
+  name: "Lighting Night Arrival"
+  entities:
+    - group.lighting_automations_night
+    - group.lighting_automations_tod_day_transitions
+
+# -- Time of Day -- #
+# - Day - #
+lighting_automations_day:
+  name: "Day Lighting"
+  entities:
+    - automation.lighting_bedroom_off_day
+    - automation.lighting_bedroom_on_day
+    - automation.lighting_hallway_off_day
+    - automation.lighting_hallway_on_day
+    - automation.lighting_kitchen_off_day
+    - automation.lighting_kitchen_on_day
+    - automation.lighting_living_area_off_day
+    - automation.lighting_living_area_on_day
+    - automation.lighting_study_off_day
+    - automation.lighting_study_on_day
+  
+# - Night - #
+lighting_automations_night:
+  name: "Night Lighting"
+  entities:
+    - automation.lighting_bedroom_off_night
+    - automation.lighting_bedroom_on_night
+    - automation.lighting_hallway_off_night
+    - automation.lighting_hallway_on_night
+    - automation.lighting_kitchen_off_night
+    - automation.lighting_kitchen_on_night
+    - automation.lighting_living_area_off_night
+    - automation.lighting_living_area_on_night
+    - automation.lighting_study_off_night
+    - automation.lighting_study_on_night 
+
+# -- Transitions -- #
+# - Time of Day - #
+lighting_automations_transitions:
+  name: "Lighting Transition"
+  entities:
+    - group.lighting_automations_tod_day_transitions
+    - group.lighting_automations_tod_night_transitions
+# Day #
+lighting_automations_tod_day_transitions:
+  name: "Day Lighting Transition"
+  entities:
+    - automation.lighting_transition_bedroom_room_day
+    - automation.lighting_transition_bedroom_zone_day        
+    - automation.lighting_transition_dining_area_day
+    - automation.lighting_transition_hallway_day
+    - automation.lighting_transition_kitchen_room_day
+    - automation.lighting_transition_kitchen_zone_day
+    - automation.lighting_transition_living_area_room_day
+    - automation.lighting_transition_living_area_zone_day
+    - automation.lighting_transition_study_room_day
+    - automation.lighting_transition_study_zone_day
+    - automation.mode_media_off_day_dark
+    - automation.mode_media_off_day_normal
+    - automation.mode_study_gaming_off_day_dark
+    - automation.mode_study_gaming_off_day_normal
+    - automation.mode_study_wfh_off_day_dark
+    - automation.mode_study_wfh_off_day_normal
+# Night #
+lighting_automations_tod_night_transitions:
+  name: "Night Lighting Transition"
+  entities:
+    - automation.lighting_transition_bedroom_room_night
+    - automation.lighting_transition_bedroom_zone_night
+    - automation.lighting_transition_dining_area_night
+    - automation.lighting_transition_hallway_night
+    - automation.lighting_transition_kitchen_room_night
+    - automation.lighting_transition_kitchen_zone_night
+    - automation.lighting_transition_living_area_room_night
+    - automation.lighting_transition_living_area_zone_night
+    - automation.lighting_transition_study_room_night
+    - automation.lighting_transition_study_zone_night
+    - automation.mode_media_off_night_normal
+    - automation.mode_study_gaming_off_night_normal
+
+# -- Presence Mode -- #
+# - Departure - #
+departure_automations:
+  name: Departure
+  entities:
+    - group.lighting_automations
+    - group.power_automations
+    - automation.component_alarm_clock
+    - group.climate_automations
+# - Arrival - #
+arrival_automations:
+  name: Arrival
+  entities:
+    - group.power_automations
+    - automation.component_alarm_clock
+    - group.climate_automations
+    - group.lighting_automations_entertainment    
+
+# -- Power -- #
+power_automations:
+  name: "Power Automations"
+  entities:
+    - group.power_desk_automations
+# - Desk - #
+power_desk_automations:
+  name: "Power Desk Automations"
+  entities:
+    - automation.power_desktop_off
+    - automation.power_desktop_on
+    - automation.power_docking_station_off
+    - automation.power_docking_station_on
+
+# -- System -- #
+# - Presence - #
+system_presence_automations:
+  name: "System Presence Automations"
+  entities:
+    - automation.system_presence_arrival
+    - automation.system_presence_departure
+
+# -- Modes -- #
+# - Gaming - #
+system_gaming_automations:
+  name: "System Gaming Automations"
+  entities:
+    - automation.mode_study_gaming_off_day_dark
+    - automation.mode_study_gaming_off_day_normal
+    - automation.mode_study_gaming_off_night_normal
+# - Work from Home - #
+system_wfh_automations:
+  name: "System WFH Automations"
+  entities:
+    - automation.mode_study_wfh_off_day_dark
+    - automation.mode_study_wfh_off_day_normal
+    - automation.mode_study_wfh_off_night_normal
+    - automation.mode_study_wfh_power_on
+
+# --- Components --- #
+# -- Alarm Clocks -- #
+# - Bedroom - #
+alarm_clock_bedroom:
+  name: "Alarm Clock"
+  entities:
+    - switch.alarm_clock_bedroom
+    - input_datetime.alarm_wakeup_time_bedroom
+    - input_boolean.alarm_weekday_bedroom
+    - input_boolean.alarm_weekend_bedroom
+# - Study - #
+alarm_clock_study:
+  name: "Alarm Clock"
+  entities:
+    - switch.alarm_clock_study
+    - input_datetime.alarm_wakeup_time_study
+    - input_boolean.alarm_weekday_study
+    - input_boolean.alarm_weekend_study
+
+# -- Blinds -- #
+#blinds_flat:
+#  name: "All Blinds"
+#  entities:
+#    - input_datetime.alarm_wakeup_time
+
+# --- Power --- #
+smart_plugs:
+  name: Smart Plugs
+  entities:
+    - group.power_desk
+    - group.power_fans
+    - group.power_media   
+    - group.power_misc
+# - Desk - #
+power_desk:
+  name: Study Desk
+  entities:
+    - switch.power_study_desk_docking_station
+    - switch.power_study_desk_desktop
+    - switch.power_study_desk_peripherals
+    - switch.power_study_desk_chargers
+# - Fans - #
+power_fans:
+  name: Fans
+  entities:
+    - switch.power_fan_bedroom
+    - switch.power_fan_living_area
+    - switch.power_fan_study
+# -- Media -- #
+power_media:
+  name: Media
+  entities:
+    - group.power_living_area_media
+    - group.power_bedroom_media
+modes_living_area:
+  name: Living Area Modes
+  entities:
+    - switch.mode_living_area_entertainment
+modes_study:
+  name: Study Modes
+  entities:
+    - switch.mode_study_gaming
+    - switch.mode_study_guest
+    - switch.mode_study_wfh
+power_living_area_media:
+  name: Living Area Media
+  entities:
+    - switch.power_living_area_media_tv
+    - switch.power_living_area_media_xboxone
+    - switch.power_living_area_media_ps4
+    - switch.power_living_area_media_accessories
+    - switch.power_living_area_media_hue_sync_box
+power_bedroom_media:
+  name: Bedroom Media
+  entities:
+    - switch.power_media_bedroom_tv 
+# - Misc - #
+power_misc:
+  name: Miscellaneous
+  entities:
+    - switch.power_christmas_light_pot
+    - switch.power_christmas_tree
+    - switch.power_misc_dryer
+# --- Presence --- #
+presence:
+  name: Presence
+  entities:
+    - group.presence_residents
+    - group.presence_trusted_people
+# -- Residents -- #
+presence_residents:
+  name: Residents
+  entities:
+    - device_tracker.marc_pixel3
+# -- Trusted People -- #
+presence_trusted_people:
+  name: Trusted People
+  entities:   
+    - device_tracker.dad_dnokia
+    - device_tracker.mum_mnokia    
+    
