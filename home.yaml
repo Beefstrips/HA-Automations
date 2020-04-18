@@ -1,0 +1,748 @@
+      - type: custom:stack-in-card
+        mode: vertical
+        cards:  
+# -- Status Screen -- #
+          - type: picture-elements
+            image: /local/images/house-element.jpg
+            elements:
+# - Presence - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.presence_mode
+                    state: 'Home'
+                elements:
+                  - type: state-icon
+                    entity: sensor.presence_mode
+                    tap_action:
+                      action: call-service
+                      service: input_boolean.toggle
+                      service_data:
+                        entity_id: input_boolean.mode_presence
+                    style:
+                      top: 10%
+                      left: 10%
+                      --item-icon-height: 55px
+                      --item-icon-width: 55px
+                      --paper-item-icon-color: rgb(0,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.presence_mode
+                    state: 'Away'
+                elements:
+                  - type: state-icon
+                    entity: sensor.presence_mode
+                    tap_action:
+                      action: call-service
+                      service: input_boolean.toggle
+                      service_data:
+                        entity_id: input_boolean.mode_presence
+                    style:
+                      top: 10%
+                      left: 10%
+                      --item-icon-height: 55px
+                      --item-icon-width: 55px
+                      --paper-item-icon-color: rgb(255,0,0)                  
+# - Occupancy - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.occupancy_mode
+                    state: 'Single'
+                elements:
+                  - type: state-icon
+                    entity: sensor.occupancy_mode
+                    tap_action:
+                      action: call-service
+                      service: input_boolean.toggle
+                      service_data:
+                        entity_id: input_boolean.mode_occupancy
+                    style:
+                      top: 10%
+                      left: 26%
+                      --item-icon-height: 55px
+                      --item-icon-width: 55px
+                      --paper-item-icon-color: rgb(255,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.occupancy_mode
+                    state: 'Guest'
+                elements:
+                  - type: state-icon
+                    entity: sensor.occupancy_mode
+                    tap_action:
+                      action: call-service
+                      service: input_boolean.toggle
+                      service_data:
+                        entity_id: input_boolean.mode_occupancy
+                    style:
+                      top: 10%
+                      left: 26%
+                      --item-icon-height: 55px
+                      --item-icon-width: 55px
+                      --paper-item-icon-color: rgb(255,165,0)                  
+# - Activity - #               
+              - type: state-icon
+                entity: sensor.whereabouts
+                style:
+                  top: 10%
+                  left: 42%
+                  --item-icon-height: 45px
+                  --item-icon-width: 45px
+                  --paper-item-icon-color: rgb(0,255,0)
+# - Time of Day - #
+              - type: conditional
+                conditions:
+                  - entity: sensor.time_of_day
+                    state: 'Day'
+                elements:
+                  - type: state-icon
+                    entity: sensor.time_of_day
+                    style:
+                      top: 10%
+                      left: 58%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,255,0)  
+              - type: conditional
+                conditions:
+                  - entity: sensor.time_of_day
+                    state: 'Night'
+                elements:
+                  - type: state-icon
+                    entity: sensor.time_of_day
+                    style:
+                      top: 10%
+                      left: 58%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(0,0,255)                    
+# - Alarm Clock - #
+              - type: conditional
+                conditions:
+                  - entity: sensor.alarm_clock
+                    state: 'On'
+                elements:
+                  - type: state-icon
+                    entity: sensor.alarm_clock
+                    style:
+                      top: 10%
+                      left: 74%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.alarm_clock
+                    state: 'Off'
+                elements:
+                  - type: state-icon
+                    entity: sensor.alarm_clock
+                    style:
+                      top: 10%
+                      left: 74%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,0,0)                  
+# - Front Door Lock - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.front_door_lock_state
+                    state: 'Locked'
+                elements:
+                  - type: state-icon
+                    entity: sensor.front_door_lock_state
+                    tap_action:
+                      action: call-service
+                      service: lock.unlock
+                      service_data:
+                        entity_id: lock.front_door
+                    style:
+                      top: 10%
+                      left: 90%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(0,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.front_door_lock_state
+                    state: 'Unlocked'
+                elements:
+                  - type: state-icon
+                    entity: sensor.front_door_lock_state
+                    tap_action:
+                      action: call-service
+                      service: lock.lock
+                      service_data:
+                        entity_id: lock.front_door
+                    style:
+                      top: 10%
+                      left: 90%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,0,0) 
+# - Bathroom - #               
+              - type: state-icon
+                entity: sensor.aarlo_arlo_cameras
+                icon: mdi:shower
+                style:
+                  top: 26%
+                  left: 7%
+                  --item-icon-height: 45px
+                  --item-icon-width: 45px
+                  --paper-item-icon-color: rgb(0,255,0)                  
+              - type: state-label
+                entity: sensor.temperature_thermostat_bathroom
+                style:
+                  top: 40%
+                  left: 7%
+                  color: rgb(255,255,0)
+# - Bedroom - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.motion_bedroom
+                    state: 'Inactive'
+                elements:
+                  - type: state-icon
+                    entity: sensor.motion_bedroom
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace/6/                    
+                    icon: mdi:hotel
+                    style:
+                      top: 26%
+                      left: 21%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(0,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.motion_bedroom
+                    state: 'Active'
+                elements:
+                  - type: state-icon
+                    entity: sensor.motion_bedroom
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace/6/                    
+                    icon: mdi:hotel
+                    style:
+                      top: 26%
+                      left: 21%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,0,0)
+              - type: state-label
+                entity: sensor.temperature_thermostat_bedroom
+                style:
+                  top: 40%
+                  left: 21%
+                  color: rgb(255,255,0)
+              - type: state-label
+                entity: sensor.luminance_multi_sensor_bedroom
+                style:
+                  top: 48%
+                  left: 21%
+                  color: rgb(255,255,0)              
+# - Ensuite - #               
+              - type: state-icon
+                entity: sensor.aarlo_arlo_cameras
+                icon: mdi:shower-head
+                style:
+                  top: 26%
+                  left: 35%
+                  --item-icon-height: 45px
+                  --item-icon-width: 45px
+                  --paper-item-icon-color: rgb(0,255,0)                  
+              - type: state-label
+                entity: sensor.temperature_thermostat_ensuite
+                style:
+                  top: 40%
+                  left: 35%
+                  color: rgb(255,255,0)
+# - Hallway - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.motion_hallway
+                    state: 'Inactive'
+                elements:
+                  - type: state-icon
+                    entity: sensor.motion_hallway
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace/7/                     
+                    icon: mdi:barn
+                    style:
+                      top: 26%
+                      left: 49%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(0,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.motion_hallway
+                    state: 'Active'
+                elements:
+                  - type: state-icon
+                    entity: sensor.motion_hallway
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace/7/                       
+                    icon: mdi:barn
+                    style:
+                      top: 26%
+                      left: 49%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,0,0)
+              - type: state-label
+                entity: sensor.temperature_multi_sensor_hallway
+                style:
+                  top: 40%
+                  left: 49%
+                  color: rgb(255,255,0)
+              - type: state-label
+                entity: sensor.luminance_multi_sensor_hallway
+                style:
+                  top: 48%
+                  left: 49%
+                  color: rgb(255,255,0)
+# - Kitchen - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.motion_kitchen
+                    state: 'Inactive'
+                elements:
+                  - type: state-icon
+                    entity: sensor.motion_kitchen
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace/8/                    
+                    icon: mdi:chef-hat
+                    style:
+                      top: 26%
+                      left: 63%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(0,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.motion_kitchen
+                    state: 'Active'
+                elements:
+                  - type: state-icon
+                    entity: sensor.motion_kitchen
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace/8/                    
+                    icon: mdi:chef-hat
+                    style:
+                      top: 26%
+                      left: 63%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,0,0)
+              - type: state-label
+                entity: sensor.temperature_thermostat_kitchen
+                style:
+                  top: 40%
+                  left: 63%
+                  color: rgb(255,255,0)
+              - type: state-label
+                entity: sensor.luminance_multi_sensor_kitchen
+                style:
+                  top: 48%
+                  left: 63%
+                  color: rgb(255,255,0)
+# - Living Area - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.motion_living_area
+                    state: 'Inactive'
+                elements:
+                  - type: state-icon
+                    entity: sensor.motion_living_area
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace/9/                    
+                    icon: mdi:sofa
+                    style:
+                      top: 26%
+                      left: 77%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(0,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.motion_living_area
+                    state: 'Active'
+                elements:
+                  - type: state-icon
+                    entity: sensor.motion_living_area
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace/9/                    
+                    icon: mdi:sofa
+                    style:
+                      top: 26%
+                      left: 77%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,0,0)
+              - type: state-label
+                entity: sensor.temperature_thermostat_living_area
+                style:
+                  top: 40%
+                  left: 77%
+                  color: rgb(255,255,0)
+              - type: state-label
+                entity: sensor.luminance_multi_sensor_living_area
+                style:
+                  top: 48%
+                  left: 77%
+                  color: rgb(255,255,0)
+# - Study - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.motion_study
+                    state: 'Inactive'
+                elements:
+                  - type: state-icon
+                    entity: sensor.motion_study
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace/10/                    
+                    icon: mdi:briefcase
+                    style:
+                      top: 26%
+                      left: 91%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(0,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.motion_study
+                    state: 'Active'
+                elements:
+                  - type: state-icon
+                    entity: sensor.motion_study
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace/10/
+                    icon: mdi:briefcase
+                    style:
+                      top: 26%
+                      left: 91%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,0,0)
+              - type: state-label
+                entity: sensor.temperature_thermostat_study
+                style:
+                  top: 40%
+                  left: 91%
+                  color: rgb(255,255,0)
+              - type: state-label
+                entity: sensor.luminance_multi_sensor_study
+                style:
+                  top: 48%
+                  left: 91%
+                  color: rgb(255,255,0)
+# - Vacuum - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.vacuum_status
+                    state: 'Docked'
+                  - entity: switch.cleaning_schedule
+                    state: 'off'                     
+                elements:
+                  - type: state-icon
+                    entity: sensor.vacuum_status
+                    tap_action:
+                      action: call-service
+                      service: vacuum.start
+                      service_data:
+                        entity_id: vacuum.betty               
+                    style:
+                      top: 93%
+                      left: 5%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.vacuum_status
+                    state: 'Docked'
+                  - entity: switch.cleaning_schedule
+                    state: 'on'                    
+                elements:
+                  - type: state-icon
+                    entity: sensor.vacuum_status
+                    tap_action:
+                      action: call-service
+                      service: vacuum.start
+                      service_data:
+                        entity_id: vacuum.betty               
+                    style:
+                      top: 93%
+                      left: 5%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,165,0)                      
+              - type: conditional
+                conditions:
+                  - entity: sensor.vacuum_status
+                    state: 'Cleaning'
+                elements:
+                  - type: state-icon
+                    entity: sensor.vacuum_status
+                    tap_action:
+                      action: call-service
+                      service: vacuum.pause
+                      service_data:
+                        entity_id: vacuum.betty
+                    hold_action:
+                      action: call-service
+                      service: vacuum.return_to_base
+                      service_data:
+                        entity_id: vacuum.betty                     
+                    style:
+                      top: 93%
+                      left: 5%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,165,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.vacuum_status
+                    state: 'Paused'
+                elements:
+                  - type: state-icon
+                    entity: sensor.vacuum_status
+                    tap_action:
+                      action: call-service
+                      service: vacuum.start
+                      service_data:
+                        entity_id: vacuum.betty
+                    hold_action:
+                      action: call-service
+                      service: vacuum.return_to_base
+                      service_data:
+                        entity_id: vacuum.betty                     
+                    style:
+                      top: 93%
+                      left: 5%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,165,0)                  
+              - type: conditional
+                conditions:
+                  - entity: sensor.vacuum_status
+                    state: 'Warning'
+                elements:
+                  - type: state-icon
+                    entity: sensor.vacuum_status
+                    style:
+                      top: 93%
+                      left: 5%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,0,0)                  
+# - HACS - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.hacs 
+                    state: '0'
+                elements:
+                  - type: state-icon
+                    entity: sensor.hacs
+                    tap_action:
+                      action: navigate
+                      navigation_path: /hacs/                   
+                    icon: mdi:basket-fill
+                    style:
+                      top: 93%
+                      left: 87%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(0,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.hacs 
+                    state_not: '0'
+                elements:
+                  - type: state-icon
+                    entity: sensor.hacs
+                    tap_action:
+                      action: navigate
+                      navigation_path: /hacs/                   
+                    icon: mdi:basket-fill
+                    style:
+                      top: 93%
+                      left: 87%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,165,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.hacs 
+                    state: 'unavailable'
+                elements:
+                  - type: state-icon
+                    entity: sensor.hacs
+                    tap_action:
+                      action: navigate
+                      navigation_path: /hacs/                   
+                    icon: mdi:basket-fill
+                    style:
+                      top: 93%
+                      left: 87%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,0,0)                                             
+# - Rpi Power - # 
+              - type: conditional
+                conditions:
+                  - entity: sensor.rpi_power_status 
+                    state: 'Everything is working as intended'
+                elements:
+                  - type: state-icon
+                    entity: sensor.rpi_power_status
+                    icon: mdi:flash
+                    style:
+                      top: 93%
+                      left: 95%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(0,255,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.rpi_power_status 
+                    state: 'Docked'
+                elements:
+                  - type: state-icon
+                    entity: sensor.rpi_power_status
+                    icon: mdi:flash
+                    style:
+                      top: 93%
+                      left: 95%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,165,0)
+              - type: conditional
+                conditions:
+                  - entity: sensor.rpi_power_status 
+                    state: 'Your Raspberry Pi is overheating, consider getting a fan or heat sinks'
+                elements:
+                  - type: state-icon
+                    entity: sensor.rpi_power_status
+                    icon: mdi:flash
+                    style:
+                      top: 93%
+                      left: 95%
+                      --item-icon-height: 45px
+                      --item-icon-width: 45px
+                      --paper-item-icon-color: rgb(255,0,0)
+# - Weather Forecast - #
+          - type: custom:text-divider-row
+            text: Weather
+          - type: weather-forecast
+            entity: weather.dark_sky 
+# -- Dynamic Display -- #  
+      - type: custom:stack-in-card
+        mode: vertical
+        cards:
+# - Open Doors - #              
+          - type: custom:auto-entities
+            show_empty: false          
+            card:
+              title: Open Doors
+              type: glance
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.contact_state*
+              exclude:
+                - state: 'Closed'
+            sort:
+              method: name   
+# - Active Devices - #    
+          - type: custom:auto-entities
+            show_empty: false
+            card:
+              title: Devices On
+              type: glance
+              show_header_toggle: false
+              tap_action:
+                action: toggle              
+            filter:
+              include:
+                - domain: switch
+                - entity_id: light.*_room
+              exclude:
+                - state: 'off'
+                - state: 'unavailable'
+                - domain: group
+                - entity_id: light.hpmusic*
+                - entity_id: light.hgrp_*
+                - entity_id: light.pc
+                - entity_id: light.tv
+                - entity_id: switch.cleaning_schedule
+                - entity_id: light.power_christmas_tree 
+                - entity_id: light.power_christmas_light_pot
+                - entity_id: switch.tv_living_area
+                - entity_id: switch.ps4
+                - entity_id: switch.xbox_one
+                - entity_id: switch.tv_bedroom
+                - entity_id: switch.media_centre_living_area
+                - entity_id: switch.play_pc_living_area
+                - entity_id: switch.mode_living_area_entertainment
+                - entity_id: switch.mode_study_gaming
+                - entity_id: switch.mode_study_guest
+                - entity_id: switch.mode_study_wfh
+                - entity_id: switch.alarm_clock*
+            sort:
+              method: name
+# - Devices Needing Attention - #              
+          - type: custom:auto-entities
+            show_empty: false          
+            card:
+              title: Offline Devices
+              type: glance
+              show_header_toggle: false
+            filter:
+              include:
+                - state: 'unavailable'
+                - state: 'unknown' 
+                - state: 'not_available'                
+              exclude:
+                - domain: group
+                - domain: person               
+                - entity_id: sensor.vacuum_last_qm
+                - entity_id: light.hpmusic*
+                - entity_id: light.hgrp_*
+                - entity_id: light.pc
+                - entity_id: light.tv
+                - entity_id: light.media_tv_backlight*
+                - entity_id: switch.cleaning_schedule
+                - entity_id: sensor.hacs 
+                - entity_id: light.power_christmas_tree 
+                - entity_id: light.power_christmas_light_pot
+                - entity_id: switch.power_christmas_tree 
+                - entity_id: switch.power_christmas_light_pot  
+                - entity_id: light.dryer
+                - entity_id: switch.power_misc_dryer 
+                - entity_id: switch.alarm_clock* 
+            sort:
+              method: name
+# - Battery Warnings - #              
+          - type: custom:auto-entities
+            show_empty: false          
+            card:
+              title: Low Batteries
+              type: glance
+              show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.battery_level*
+                  state: '< 15' 
+            sort:
+              method: name 

@@ -1,0 +1,164 @@
+      - type: custom:stack-in-card
+        mode: vertical
+        cards:
+          - type: custom:text-divider-row
+            text: Core
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                name: CPU
+                entity: sensor.processor_use
+                unti: '%'
+                severity:
+                  green: 0
+                  yellow: 45
+                  red: 85
+              - type: gauge
+                name: Memory Used
+                entity: sensor.memory_use
+                unti: 'MiB'
+                severity:
+                  green: 0
+                  yellow: 1024
+                  red: 3072  
+                max: 4096
+# - Internet Connection - #
+          - type: custom:text-divider-row
+            text: Internet Connection
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                name: Download
+                entity: sensor.speedtest_download
+                unti: 'Mbps'
+                severity:
+                  green: 63
+                  yellow: 45
+                  red: 0
+                max: 73
+              - type: gauge
+                name: Upload
+                entity: sensor.speedtest_upload
+                unti: 'Mbps'
+                severity:
+                  green: 14
+                  yellow: 7
+                  red: 5 
+                max: 18
+        show_header_toggle: false
+        title: C.H.L.O.E                 
+
+# -- Battery Levels -- #        
+      - type: custom:stack-in-card
+        mode: vertical
+        cards:
+          - type: custom:text-divider-row
+            text: Blind Remotes
+          - type: custom:auto-entities
+            card:
+                type: entities
+                show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.battery_level_blind_remote*
+              exclude:        
+            sort:
+              method: name  
+          - type: custom:text-divider-row
+            text: Cameras
+          - type: custom:auto-entities
+            card:
+                type: entities
+                show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.battery_level_*camera*
+              exclude:        
+            sort:
+              method: name    
+          - type: custom:text-divider-row
+            text: Contact Sensors
+          - type: custom:auto-entities
+            card:
+                type: entities
+                show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.battery_level_contact*
+              exclude:        
+            sort:
+              method: name   
+          - type: custom:text-divider-row
+            text: Dimmer Switches
+          - type: custom:auto-entities
+            card:
+                type: entities
+                show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.battery_level_dimmer*
+              exclude:        
+            sort:
+              method: name                            
+          - type: custom:text-divider-row
+            text: Door Locks            
+          - type: custom:auto-entities
+            card:
+                type: entities
+                show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.battery_level_lock*
+              exclude: 
+            sort:
+              method: name
+          - type: custom:text-divider-row
+            text: Multi Sensors              
+          - type: custom:auto-entities
+            card:
+                type: entities
+                show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.battery_level_multi_sensor*
+              exclude:
+            sort:
+              method: name              
+          - type: custom:text-divider-row
+            text: Temperature Sensors              
+          - type: custom:auto-entities
+            card:
+                type: entities
+                show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.battery_level_temperature_sensor*
+              exclude:   
+            sort:
+              method: name              
+          - type: custom:text-divider-row
+            text: Thermostats             
+          - type: custom:auto-entities
+            card:
+                type: entities
+                show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.battery_level_thermostat*
+              exclude:
+            sort:
+              method: name          
+          - type: custom:text-divider-row
+            text: Misc Devices             
+          - type: custom:auto-entities
+            card:
+                type: entities
+                show_header_toggle: false
+            filter:
+              include:
+                - entity_id: sensor.battery_level_vacuum*
+              exclude:
+            sort:
+              method: name                
+        show_header_toggle: false
+        title: Battery Levels
